@@ -267,12 +267,18 @@ namespace SplitScreenCoop
             return Display.displays.Length >= 2;
         }
 
-        public static void InitSecondDisplay()
+        public static void InitSecondDisplay() // Edited by ME, BREAD to handle more monitors...
         {
-            if (!Display.displays[1].active)
-                Display.displays[1].Activate();
-            cameraListeners[1].BindToDisplay(Display.displays[1]);
-            cameraListeners[1].mirrorMain = true;
+            for (int i = 1; i < Display.displays.Length; i++) {
+                // Variables //
+                Display display = Display.displays[i]
+                // Checks //
+                if (!display.active)
+                    display.Activate();
+                // Settings //
+                cameraListeners[i].BindToDisplay(display);
+                cameraListeners[i].mirrorMain = true;
+            }
         }
         
         /// <summary>

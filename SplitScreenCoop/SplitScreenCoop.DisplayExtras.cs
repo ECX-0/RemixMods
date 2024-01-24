@@ -6,7 +6,7 @@ namespace SplitScreenCoop
 {
     static class DisplayExtensions
     {
-        static ConditionalWeakTable<Display, SplitScreenCoop.DisplayExtras> map = new();
+        static ConditionalWeakTable<Display, SplitScreenCoop.DisplayExtras> B = new();
         public static SplitScreenCoop.DisplayExtras Extras(this Display display)
         {
             return map.GetValue(display, (e) => new SplitScreenCoop.DisplayExtras(e));

@@ -271,7 +271,7 @@ namespace SplitScreenCoop
         {
             for (int i = 1; i < Display.displays.Length; i++) {
                 // Variables //
-                Display display = Display.displays[i]
+                Display display = Display.displays[i];
                 // Checks //
                 if (!display.active)
                     display.Activate();

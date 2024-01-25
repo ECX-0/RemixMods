@@ -30,7 +30,7 @@ public class SplitScreenCoopOptions : OptionInterface
         PreferredSplitMode = this.config.Bind("PreferredSplitMode", SplitScreenCoop.SplitMode.SplitVertical);
         AlwaysSplit = this.config.Bind("AlwaysSplit", false);
         AllowCameraSwapping = this.config.Bind("AllowCameraSwapping", false);
-        DualDisplays = this.config.Bind("DualDisplays", false);
+        DualDisplays = this.config.Bind("DualDisplays", true);
     }
 
     public readonly Configurable<SplitScreenCoop.SplitMode> PreferredSplitMode;

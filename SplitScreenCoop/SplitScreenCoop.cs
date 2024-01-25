@@ -406,7 +406,7 @@ namespace SplitScreenCoop
                     {
                         Logger.LogInfo("RainWorldGame_ctor1 creating roomcamera2");
                         var cams = self.cameras;
-                        int ncams = preferedSplitMode == SplitMode.Split4Screen ? 4 : 2;
+                        int ncams = self.session.Players.Count;
                         Array.Resize(ref cams, ncams);
                         self.cameras = cams;
                         for(int i = 1; i < ncams; i++)
@@ -436,6 +436,8 @@ namespace SplitScreenCoop
             {
                 Logger.LogInfo("enabling player 2");
                 manager.rainWorld.setup.player2 = true;
+                manager.rainWorld.setup.player3 = true;
+                manager.rainWorld.setup.player4 = true;
             }
 
             realizer2 = null;

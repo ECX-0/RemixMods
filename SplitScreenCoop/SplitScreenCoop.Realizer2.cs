@@ -17,15 +17,21 @@ namespace SplitScreenCoop
         {
             Logger.LogInfo("MakeRealizer2");
             if (self.session.Players.Count < 2 || self.roomRealizer == null) return;
-            var player = self.session.Players.FirstOrDefault(p => p != self.roomRealizer.followCreature);
-            if (player == null) return;
-            Logger.LogInfo("MakeRealizer2 making RoomRealizer");
-            realizer2 = new RoomRealizer(player, self.world)
+            foreach (var player in self.session.Players) 
             {
-                realizedRooms = self.roomRealizer.realizedRooms,
-                recentlyAbstractedRooms = self.roomRealizer.recentlyAbstractedRooms,
-                realizeNeighborCandidates = self.roomRealizer.realizeNeighborCandidates
-            };
+                // Checks //
+                if (player == null) continue;
+                if (player == self.roomRealizer.followCreature) continue;
+                // Debug //
+                Logger.LogInfo("MakeRealizer2 making RoomRealizer");
+                // Realizer //
+                realizer2 = new RoomRealizer(player, self.world)
+                {
+                    realizedRooms = self.roomRealizer.realizedRooms,
+                    recentlyAbstractedRooms = self.roomRealizer.recentlyAbstractedRooms,
+                    realizeNeighborCandidates = self.roomRealizer.realizeNeighborCandidates
+                };
+            }
         }
 
         /// <summary>

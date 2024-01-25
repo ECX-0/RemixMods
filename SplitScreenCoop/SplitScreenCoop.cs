@@ -345,9 +345,9 @@ namespace SplitScreenCoop
                 listener.AttachTo(fcameras[i], Display.main);
             }
 
-            camera2.enabled = false;
-            camera3.enabled = false;
-            camera4.enabled = false;
+            camera2.enabled = Display.displays.Length >= 2;
+            camera3.enabled = Display.displays.Length >= 3;
+            camera4.enabled = Display.displays.Length >= 4;
             self.UpdateCameraPosition();
             Logger.LogInfo("Futile_Init camera2 success");
         }
@@ -485,7 +485,8 @@ namespace SplitScreenCoop
             SetSplitMode(SplitMode.NoSplit, self);
             if (dualDisplays && DualDisplaySupported())
             {
-                cameraListeners[1].mirrorMain = true;
+                for (int i = 1; i < cameraListeners.Length; i++)
+                    cameraListeners[i].mirrorMain = true;
             }
             realizer2 = null;
             orig(self);
@@ -580,9 +581,12 @@ namespace SplitScreenCoop
                 if (dualDisplays)
                 {
                     cameraListeners[0].direct = true;
-                    cameraListeners[1].fcamera.enabled = true;
-                    cameraListeners[1].mirrorMain = false;
-                    cameraListeners[1].direct = true;
+                    for (int i = 1; i < Display.displays.Length; i++)
+                    {
+                        cameraListeners[i].fcamera.enabled = true;
+                        cameraListeners[i].mirrorMain = false;
+                        cameraListeners[i].direct = true;
+                    }
                 }
                 else
                 {

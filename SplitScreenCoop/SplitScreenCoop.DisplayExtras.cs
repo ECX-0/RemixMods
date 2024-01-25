@@ -32,10 +32,10 @@ namespace SplitScreenCoop
                 {
                     var canvasHolder = GameObject.Instantiate(Futile.instance._cameraImage.transform.parent.gameObject); // dupe
                     var dummyCamera = canvasHolder.AddComponent<Camera>(); // its 2023 and unity still has this sort of bugs
-                    dummyCamera.targetDisplay = 1;
+                    dummyCamera.targetDisplay = Display.displays.IndexOf(display);
                     dummyCamera.cullingMask = 0;
                     var canvas = canvasHolder.GetComponent<Canvas>();
-                    canvas.targetDisplay = 1;
+                    canvas.targetDisplay = Display.displays.IndexOf(display);
                     sLogger.LogInfo(canvas.isActiveAndEnabled);
                     rawImage = canvasHolder.GetComponentInChildren<RawImage>();
                 }

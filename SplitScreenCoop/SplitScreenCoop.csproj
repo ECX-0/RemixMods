@@ -411,6 +411,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlayerInfo.cs" />
     <Compile Include="SplitScreenCoop.CameraListener.cs" />
     <Compile Include="SplitScreenCoop.Coop.cs" />
     <Compile Include="SplitScreenCoop.CoopFixes.cs" />

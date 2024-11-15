@@ -68,16 +68,10 @@ namespace SplitScreenCoop
         public static bool dualDisplays;
         public static bool stickTogetherEnabled;
 
-        public static Camera[] fcameras = new Camera[4];
+        public static Camera[] fcameras = new Camera[Display.displays.Length];
         public static CameraListener[] cameraListeners = new CameraListener[4];
         public static List<DisplayExtras> displayExtras = new();
 
-        public static Camera camera2;
-        public static Camera camera3;
-        public static Camera camera4;
-        public static GameObject cameraHolder2;
-        public static GameObject cameraHolder3;
-        public static GameObject cameraHolder4;
 
         public static Vector2[] camOffsets = new Vector2[] { new Vector2(0, 0), new Vector2(32000, 0), new Vector2(0, 32000), new Vector2(32000, 32000) }; // one can dream
 
@@ -316,10 +310,16 @@ namespace SplitScreenCoop
 
         public static void InitSecondDisplay()
         {
-            if (!Display.displays[1].active)
-                Display.displays[1].Activate();
-            cameraListeners[1].BindToDisplay(Display.displays[1]);
-            cameraListeners[1].mirrorMain = true;
+            for (int i = 1; i < Display.displays.Length; i++)
+            {
+                // Conditions //
+                if (!Display.displays[i].active)
+                    Display.displays[i].Activate();
+                // Init //
+                cameraListeners[i].BindToDisplay(Display.displays[1]);
+                // Settings //
+                cameraListeners[i].mirrorMain = true;
+            }
         }
         
         /// <summary>
@@ -329,7 +329,7 @@ namespace SplitScreenCoop
         {
             Logger.LogInfo("Allocation");
             orig(self, rainWorld);
-            int ntex = Mathf.Max(4, self.cameraTextures.GetLength(0));
+            int ntex = Mathf.Max(Display.displays.Length, self.cameraTextures.GetLength(0)); // FIX THISSSS //
             self.cameraTextures = new Texture2D[ntex, 2];
             for (int i = 0; i < ntex; i++)
             {
@@ -362,22 +362,13 @@ namespace SplitScreenCoop
 
             Logger.LogInfo("Futile_Init creating camera2");
 
-            cameraHolder2 = new GameObject();
-            cameraHolder2.transform.parent = self.gameObject.transform;
-            camera2 = cameraHolder2.AddComponent<Camera>();
-            self.InitCamera(camera2, 2);
-
-            cameraHolder3 = new GameObject();
-            cameraHolder3.transform.parent = self.gameObject.transform;
-            camera3 = cameraHolder3.AddComponent<Camera>();
-            self.InitCamera(camera3, 3);
-
-            cameraHolder4 = new GameObject();
-            cameraHolder4.transform.parent = self.gameObject.transform;
-            camera4 = cameraHolder4.AddComponent<Camera>();
-            self.InitCamera(camera4, 4);
-
-            fcameras = new Camera[] { self.camera, camera2, camera3, camera4 };
+            for (int i = 0; i < fcameras.Length; i++)
+            {
+                GameObject cameraHolder = new GameObject();
+                cameraHolder.transform.parent = self.gameObject.transform;
+                fcameras[i] = cameraHolder.AddComponent<Camera>();
+                self.InitCamera(fcameras[i], i + 1);
+            }
 
             for (int i = 0; i < fcameras.Length; i++)
             {
@@ -386,9 +377,9 @@ namespace SplitScreenCoop
                 listener.AttachTo(fcameras[i], Display.main);
             }
 
-            camera2.enabled = false;
-            camera3.enabled = false;
-            camera4.enabled = false;
+            foreach (var camera in fcameras)
+                camera.enabled = true;
+
             self.UpdateCameraPosition();
             Logger.LogInfo("Futile_Init camera2 success");
         }
@@ -477,6 +468,8 @@ namespace SplitScreenCoop
             {
                 Logger.LogInfo("enabling player 2");
                 manager.rainWorld.setup.player2 = true;
+                manager.rainWorld.setup.player3 = true;
+                manager.rainWorld.setup.player4 = true;
             }
 
             realizer2 = null;
